@@ -11,7 +11,6 @@ public class ObstacleSpawnerManager : MonoBehaviour {
     void Start() {
         ObstacleData obstacleData = getRandomObstacleData();
         if (obstacleData.Obstacle != null) {
-            Debug.Log("Spawning obstacle at " + obstacleData.Position);
             Instantiate(obstacleData.Obstacle, obstacleData.Position, Quaternion.identity, obstacleRootPoint);
         }
     }
