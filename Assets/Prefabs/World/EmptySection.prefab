@@ -275,6 +275,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4249366288899322112}
+  - component: {fileID: 8408336890702266759}
   m_Layer: 0
   m_Name: EmptySection
   m_TagString: Untagged
@@ -297,6 +298,52 @@ Transform:
   m_Children:
   - {fileID: 1101270630765861397}
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8408336890702266759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5166201501511269110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d71b6ac562c5784eba69b4093be2770, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpObstaclePrefab: {fileID: 947789447549562745, guid: acce6913e8e47f945bca8a4b82fd6f3d, type: 3}
+  slideObstaclePrefab: {fileID: 7149706041339090802, guid: eb0b2885c71c2e944a63485d095e4156, type: 3}
+  obstacleRootPoint: {fileID: 5676026312052051148}
+--- !u!1 &7394767618555783192
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5676026312052051148}
+  m_Layer: 0
+  m_Name: ObstacleRootPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5676026312052051148
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7394767618555783192}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1101270630765861397}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9043203344751722580
 GameObject:
@@ -333,6 +380,7 @@ Transform:
   m_Children:
   - {fileID: 1519708453375411982}
   - {fileID: 8100506397503847467}
+  - {fileID: 5676026312052051148}
   m_Father: {fileID: 4249366288899322112}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5651843572584634353
