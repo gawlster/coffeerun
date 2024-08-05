@@ -5,38 +5,47 @@ using UnityEngine;
 public class TerrainSpawnerManager : MonoBehaviour
 {
     [SerializeField] private GameObject emptySectionPrefab;
-    
     [SerializeField] private int sectionsToRender = 3;
     
-    private LinkedList<GameObject> terrainSections = new LinkedList<GameObject>();
+    private Camera mainCamera;
+    private Renderer renderer;
+    private Queue<TerrainSection> terrainSections = new Queue<TerrainSection>();
+    private float lastSectionZ = -30;
     
-    void Start()
-    {
-        for (int i = 0; i < sectionsToRender; i++) {
-            spawnNewSection();
-        }
+    void Start() {
+        mainCamera = Camera.main;
+        spawnAndDespawnSections();
     }
     
-    private void spawnNewSection()
-    {
-        if (terrainSections.Count == 0) {
-            terrainSections.AddFirst(Instantiate(emptySectionPrefab, new Vector3(0, 0, 0), Quaternion.identity));
-            return;
+    void Update() {
+        spawnAndDespawnSections();
+    }
+    
+    private void spawnAndDespawnSections() {
+        for (int i = terrainSections.Count; i < sectionsToRender; i++) {
+            GameObject gameObject = Instantiate(emptySectionPrefab, new Vector3(0, 0, lastSectionZ + 30), Quaternion.identity);
+            terrainSections.Enqueue(new TerrainSection {
+                GameObject = gameObject,
+            });
+            lastSectionZ += 30;
         }
 
-        if (terrainSections.Count >= sectionsToRender) {
-            GameObject firstSection = terrainSections.First.Value;
-            bool firstSectionIsStillVisible = true; // TODO
-            if (firstSectionIsStillVisible) {
-                return;
-            }
-            Destroy(firstSection);
-            terrainSections.RemoveFirst();
+        TerrainSection firstSection = terrainSections.Peek();
+        if (firstSection.IsBehindCamera(mainCamera)) {
+            TerrainSection section = terrainSections.Dequeue();
+            Destroy(section.GameObject);
+        }
+    }
+
+    private struct TerrainSection {
+        public GameObject GameObject;
+
+        public bool IsBehindCamera(Camera camera, int offset = 15) {
+            return GameObject.transform.position.z + offset < camera.transform.position.z;
         }
         
-        GameObject lastSection = terrainSections.Last.Value;
-        Vector3 lastSectionPosition = lastSection.transform.position;
-        Vector3 newSectionPosition = new Vector3(lastSectionPosition.x, lastSectionPosition.y, lastSectionPosition.z + 30); // TODO: Change 10 to the length of the section
-        terrainSections.AddAfter(terrainSections.Last, Instantiate(emptySectionPrefab, newSectionPosition, Quaternion.identity));
+        public override string ToString() {
+            return "GameObject: " + GameObject;
+        }
     }
 }
