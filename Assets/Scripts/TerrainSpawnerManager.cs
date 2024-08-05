@@ -10,18 +10,11 @@ public class TerrainSpawnerManager : MonoBehaviour
     
     private LinkedList<GameObject> terrainSections = new LinkedList<GameObject>();
     
-    // Start is called before the first frame update
     void Start()
     {
         for (int i = 0; i < sectionsToRender; i++) {
             spawnNewSection();
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
     
     private void spawnNewSection()
