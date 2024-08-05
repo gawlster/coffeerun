@@ -1,6 +1,6 @@
 ﻿using System;
-using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameStateManager: MonoBehaviour {
     private static GameStateManager _instance;
@@ -12,14 +12,14 @@ public class GameStateManager: MonoBehaviour {
             return _instance;
         }
     }
-    void Awake() {
+    private void Awake() {
         _instance = this;
     }
 
     private GameStates _gameState;
     private Action<GameStates> _onGameStateChanged;
     private GameStateManager() {
-        _gameState = GameStates.Playing; // TODO change back to menu
+        _gameState = GameStates.Menu;
     }
     public GameStates GetGameState() {
         return _gameState;
@@ -28,8 +28,17 @@ public class GameStateManager: MonoBehaviour {
         Debug.Log("Changing game state from " + _gameState + " to " + newState);
         _gameState = newState;
         Time.timeScale = newState == GameStates.Playing ? 1 : 0;
-        foreach(Action<GameStates> callback in _onGameStateChanged.GetInvocationList()) {
-            callback.DynamicInvoke(_gameState);
+        if (_onGameStateChanged != null) {
+            foreach(var callback in _onGameStateChanged.GetInvocationList()) {
+                callback?.DynamicInvoke(_gameState);
+            }
+        }
+
+        if (newState == GameStates.Playing) {
+            SceneManager.LoadScene(_scenes.Game);
+        }
+        if (newState == GameStates.Menu) {
+            SceneManager.LoadScene(_scenes.Menu);
         }
     }
     public void SubscribeToGameStateChanged(Action<GameStates> callback) {
@@ -40,5 +49,11 @@ public class GameStateManager: MonoBehaviour {
         Menu,
         Playing,
         GameOver
+    }
+
+    private readonly Scenes _scenes = new Scenes();
+    private class Scenes {
+        public readonly string Menu = "MainMenu";
+        public readonly string Game = "Game";
     }
 }
