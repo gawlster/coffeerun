@@ -56,8 +56,30 @@
                 },
                 {
                     "name": "",
+                    "id": "98f88bbb-b5bb-4601-aa06-929ba09b3b2e",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "be2ea828-cd35-4afe-8ac8-23bac7cabfa1",
                     "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "312f1838-5ba4-4d47-96b1-cda0b8aba23e",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -78,8 +100,30 @@
                 },
                 {
                     "name": "",
+                    "id": "cc8659fa-9b78-4879-8fd6-2dadbdf484db",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Left",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "f6fe0ef8-d525-4876-836c-b48f42ddb260",
                     "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "872d96c6-ee26-47d2-8d56-7390dcf7dc4a",
+                    "path": "<Gamepad>/dpad/right",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
