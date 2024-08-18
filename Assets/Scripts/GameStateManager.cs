@@ -14,13 +14,11 @@ public class GameStateManager: MonoBehaviour {
     }
     private void Awake() {
         _instance = this;
+        _instance._gameState = SceneManager.GetActiveScene().name == _scenes.Menu ? GameStates.Menu : GameStates.Playing;
     }
 
     private GameStates _gameState;
     private Action<GameStates> _onGameStateChanged;
-    private GameStateManager() {
-        _gameState = GameStates.Menu;
-    }
     public GameStates GetGameState() {
         return _gameState;
     }
