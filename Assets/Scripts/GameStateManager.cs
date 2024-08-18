@@ -19,7 +19,7 @@ public class GameStateManager: MonoBehaviour {
     private GameStates _gameState;
     private Action<GameStates> _onGameStateChanged;
     private GameStateManager() {
-        _gameState = GameStates.Menu;
+        _gameState = GameStates.Playing;
     }
     public GameStates GetGameState() {
         return _gameState;
