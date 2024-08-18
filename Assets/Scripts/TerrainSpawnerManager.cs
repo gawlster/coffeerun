@@ -6,16 +6,14 @@ using UnityEngine;
 public class TerrainSpawnerManager : MonoBehaviour
 {
     [SerializeField] private GameObject emptySectionPrefab;
-    [SerializeField] private int sectionsToRender = 3;
     [SerializeField] private Boolean disableObstacles = false;
+    [SerializeField] private int sectionsToRender = 7;
+    [SerializeField] private GameObject[] sectionPrefabs; 
     
-    private Camera mainCamera;
-    private Renderer renderer;
-    private Queue<TerrainSection> terrainSections = new Queue<TerrainSection>();
-    private float lastSectionZ = -30;
+    private Queue<GameObject> terrainSections = new Queue<GameObject>();
+    private GameObject lastAddedSection;
     
     void Start() {
-        mainCamera = Camera.main;
         spawnAndDespawnSections();
     }
     
@@ -25,32 +23,32 @@ public class TerrainSpawnerManager : MonoBehaviour
     
     private void spawnAndDespawnSections() {
         for (int i = terrainSections.Count; i < sectionsToRender; i++) {
-            GameObject gameObject = Instantiate(emptySectionPrefab, new Vector3(0, 0, lastSectionZ + 30), Quaternion.identity);
-            if (disableObstacles) {
-                gameObject.GetComponent<ObstacleSpawnerManager>().disableObstacles = true;
+            var section = getNewSection();
+            var spawnPosition = getSpawnPosition(section);
+            GameObject gameObject = Instantiate(section, spawnPosition, Quaternion.identity);
+            if (terrainSections.Count >= 2) {
+                var despawnController = gameObject.GetComponent<TerrainSectionDespawnController>();
+                despawnController.OnCrossHalfwayPoint += () => {
+                    var furthestSection = terrainSections.Dequeue();
+                    Destroy(furthestSection);
+                };
             }
-            terrainSections.Enqueue(new TerrainSection {
-                GameObject = gameObject,
-            });
-            lastSectionZ += 30;
-        }
-
-        TerrainSection firstSection = terrainSections.Peek();
-        if (firstSection.IsBehindCamera(mainCamera)) {
-            TerrainSection section = terrainSections.Dequeue();
-            Destroy(section.GameObject);
+            terrainSections.Enqueue(gameObject);
+            lastAddedSection = gameObject;
         }
     }
-
-    private struct TerrainSection {
-        public GameObject GameObject;
-
-        public bool IsBehindCamera(Camera camera, int offset = 15) {
-            return GameObject.transform.position.z + offset < camera.transform.position.z;
+    
+    private GameObject getNewSection() {
+        if (disableObstacles) {
+            return emptySectionPrefab;
         }
-        
-        public override string ToString() {
-            return "GameObject: " + GameObject;
+        return sectionPrefabs[UnityEngine.Random.Range(0, sectionPrefabs.Length)];
+    }
+     
+    private Vector3 getSpawnPosition(GameObject section) {
+        if (!lastAddedSection) {
+            return Vector3.zero;
         }
+        return new Vector3(0, 0, lastAddedSection.transform.position.z + 30);
     }
 }
