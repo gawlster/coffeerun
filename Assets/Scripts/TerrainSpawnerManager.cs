@@ -23,7 +23,7 @@ public class TerrainSpawnerManager : MonoBehaviour
     
     private void spawnAndDespawnSections() {
         for (int i = terrainSections.Count; i < sectionsToRender; i++) {
-            var section = getNewSection();
+            var section = getNewSection(terrainSections.Count == 0);
             var spawnPosition = getSpawnPosition(section);
             GameObject gameObject = Instantiate(section, spawnPosition, Quaternion.identity);
             if (terrainSections.Count >= 2) {
@@ -38,8 +38,8 @@ public class TerrainSpawnerManager : MonoBehaviour
         }
     }
     
-    private GameObject getNewSection() {
-        if (disableObstacles) {
+    private GameObject getNewSection(Boolean forceEmptySection) {
+        if (disableObstacles || forceEmptySection) {
             return emptySectionPrefab;
         }
         return sectionPrefabs[UnityEngine.Random.Range(0, sectionPrefabs.Length)];
