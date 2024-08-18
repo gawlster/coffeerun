@@ -27,7 +27,7 @@ public class TerrainSpawnerManager : MonoBehaviour
             var spawnPosition = getSpawnPosition(section);
             GameObject gameObject = Instantiate(section, spawnPosition, Quaternion.identity);
             if (terrainSections.Count >= 2) {
-                var despawnController = gameObject.GetComponent<TerrainSectionDespawnController>();
+                var despawnController = gameObject.GetComponent<TerrainSectionController>();
                 despawnController.OnCrossHalfwayPoint += () => {
                     var furthestSection = terrainSections.Dequeue();
                     Destroy(furthestSection);
