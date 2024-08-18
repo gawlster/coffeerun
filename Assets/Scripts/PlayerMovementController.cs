@@ -11,6 +11,8 @@ public class PlayerMovementController : MonoBehaviour
     private float movementSpeed = 10;
     [SerializeField] private float laneSwitchSpeed = 20;
     [SerializeField] private float jumpForce = 10;
+    [SerializeField] private float normalGravity = 15;
+    [SerializeField] private float fastFallGravity = 40;
     
     private Rigidbody rb;
     private InputAction jumpAction;
@@ -22,9 +24,12 @@ public class PlayerMovementController : MonoBehaviour
     private Lane currentLane = Lane.Middle;
     private MovementDirection movementDirection = MovementDirection.None;
     private float lanePositionOffset = 3.75f;
+    
+    private Boolean isFastFalling = false;
 
     private void Start() {
         rb = GetComponent<Rigidbody>();
+        rb.useGravity = false;
         jumpAction = InputSystem.actions.FindAction("Jump");
         crouchAction = InputSystem.actions.FindAction("Crouch");
         rightAction = InputSystem.actions.FindAction("Right");
@@ -45,6 +50,12 @@ public class PlayerMovementController : MonoBehaviour
             movementSpeed = normalSpeed;
         }
 
+        if (!isGroundedCheck() && crouchAction.IsPressed()) {
+            isFastFalling = true;
+        } else {
+            isFastFalling = false;
+        }
+        
         if (movementDirection == MovementDirection.None && leftAction.WasPressedThisFrame() && currentLane != Lane.Left) {
             movementDirection = MovementDirection.Left;
         }
@@ -55,6 +66,7 @@ public class PlayerMovementController : MonoBehaviour
 
     private void FixedUpdate() {
         rb.MovePosition(setPositionForLane(transform.position + Time.fixedDeltaTime * movementSpeed * new Vector3(0, 0, 1)));
+        rb.AddForce((isFastFalling ? fastFallGravity : normalGravity) * Vector3.down, ForceMode.Acceleration);
     }
 
     private Boolean isGroundedCheck() {
