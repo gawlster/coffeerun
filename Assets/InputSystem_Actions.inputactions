@@ -22,20 +22,27 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Left",
+                    "type": "Button",
+                    "id": "19f811c6-e2e8-42b2-91f5-68301178659f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Right",
+                    "type": "Button",
+                    "id": "5911a92e-4e09-4c60-a9ad-e927453fe955",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "1de70b9b-20dc-4a58-a60b-8b20364067f2",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "",
                     "id": "96035e15-fcf1-4310-b571-cdb92bfbc226",
@@ -49,8 +56,8 @@
                 },
                 {
                     "name": "",
-                    "id": "4cc4e896-bc0e-4179-b417-9a63dfe938db",
-                    "path": "",
+                    "id": "be2ea828-cd35-4afe-8ac8-23bac7cabfa1",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -60,12 +67,23 @@
                 },
                 {
                     "name": "",
-                    "id": "be2ea828-cd35-4afe-8ac8-23bac7cabfa1",
-                    "path": "<Mouse>/rightButton",
+                    "id": "6531aa2a-0517-45e7-a46e-60996289d879",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Crouch",
+                    "action": "Left",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f6fe0ef8-d525-4876-836c-b48f42ddb260",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Right",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1,16 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ObstacleSpawnerManager : MonoBehaviour {
     [SerializeField] private GameObject jumpObstaclePrefab;
     [SerializeField] private GameObject slideObstaclePrefab;
     [SerializeField] private Transform obstacleRootPoint;
+    
+    public Boolean disableObstacles = false;
 
     void Start() {
         ObstacleData obstacleData = getRandomObstacleData();
-        if (obstacleData.Obstacle != null) {
+        if (obstacleData.Obstacle != null && !disableObstacles) {
             Instantiate(obstacleData.Obstacle, obstacleData.Position, Quaternion.identity, obstacleRootPoint);
         }
     }

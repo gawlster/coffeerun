@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ public class TerrainSpawnerManager : MonoBehaviour
 {
     [SerializeField] private GameObject emptySectionPrefab;
     [SerializeField] private int sectionsToRender = 3;
+    [SerializeField] private Boolean disableObstacles = false;
     
     private Camera mainCamera;
     private Renderer renderer;
@@ -24,6 +26,9 @@ public class TerrainSpawnerManager : MonoBehaviour
     private void spawnAndDespawnSections() {
         for (int i = terrainSections.Count; i < sectionsToRender; i++) {
             GameObject gameObject = Instantiate(emptySectionPrefab, new Vector3(0, 0, lastSectionZ + 30), Quaternion.identity);
+            if (disableObstacles) {
+                gameObject.GetComponent<ObstacleSpawnerManager>().disableObstacles = true;
+            }
             terrainSections.Enqueue(new TerrainSection {
                 GameObject = gameObject,
             });
