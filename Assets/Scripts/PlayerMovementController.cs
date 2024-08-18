@@ -6,16 +6,20 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovementController : MonoBehaviour
 {
-    [SerializeField] private float movementSpeed = 10;
+    [SerializeField] private float normalSpeed = 15;
+    [SerializeField] private float crouchSpeed = 10;
+    private float movementSpeed = 10;
     [SerializeField] private float jumpForce = 10;
     
     private Rigidbody rb;
     private InputAction jumpAction;
+    private InputAction crouchAction;
     private Boolean isJumping = false;
 
     private void Start() {
         rb = GetComponent<Rigidbody>();
         jumpAction = InputSystem.actions.FindAction("Jump");
+        crouchAction = InputSystem.actions.FindAction("Crouch");
     }
 
     private void Update() {
@@ -23,9 +27,18 @@ public class PlayerMovementController : MonoBehaviour
             StartCoroutine(startJumpCooldown());
             rb.AddForce(jumpForce * new Vector3(0, 1, 0), ForceMode.Impulse);
         }
+
+        if (isGroundedCheck() && crouchAction.IsPressed()) {
+            transform.localScale = new Vector3(1, 0.5f, 1);
+            movementSpeed = crouchSpeed;
+        } else {
+            transform.localScale = new Vector3(1, 1, 1);
+            movementSpeed = normalSpeed;
+        }
     }
 
     private void FixedUpdate() {
+        Debug.Log(movementSpeed);
         rb.MovePosition(transform.position + Time.deltaTime * movementSpeed * new Vector3(0, 0, 1));
     }
 
