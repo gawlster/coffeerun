@@ -4,10 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovementController : MonoBehaviour
-{
+public class PlayerMovementController : MonoBehaviour {
+    [SerializeField] private Mesh walkMesh;
+    [SerializeField] private Mesh crouchMesh;
+    private MeshFilter meshFilter;
+    private BoxCollider collider;
+    private Vector3 walkingColliderCenter = new Vector3(0f, 0.08f, 0f);
+    private Vector3 walkingColliderSize = new Vector3(0.13f, 0.18f, 0.13f);
+    private Vector3 crouchingColliderCenter = Vector3.zero;
+    private Vector3 crouchingColliderSize = new Vector3(0.13f, 0.05f, 0.13f);
     [SerializeField] private float normalSpeed = 15;
-    [SerializeField] private float crouchSpeed = 10;
+    [SerializeField] private float crouchSpeed = 15;
     private float movementSpeed = 10;
     [SerializeField] private float laneSwitchSpeed = 20;
     [SerializeField] private float jumpForce = 10;
@@ -30,6 +37,8 @@ public class PlayerMovementController : MonoBehaviour
     private void Start() {
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
+        meshFilter = GetComponent<MeshFilter>();
+        collider = GetComponent<BoxCollider>();
         jumpAction = InputSystem.actions.FindAction("Jump");
         crouchAction = InputSystem.actions.FindAction("Crouch");
         rightAction = InputSystem.actions.FindAction("Right");
@@ -37,16 +46,23 @@ public class PlayerMovementController : MonoBehaviour
     }
 
     private void Update() {
+        if (jumpAction.IsPressed()) {
+            Debug.Log(isGroundedCheck());
+        }
         if (!isJumping && isGroundedCheck() && jumpAction.IsPressed()) {
             StartCoroutine(startJumpCooldown());
-            rb.AddForce(jumpForce * new Vector3(0, 1, 0), ForceMode.Impulse);
+            rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
         }
 
         if (isGroundedCheck() && crouchAction.IsPressed()) {
-            transform.localScale = new Vector3(1, 0.5f, 1);
+            meshFilter.mesh = crouchMesh;
+            collider.center = crouchingColliderCenter;
+            collider.size = crouchingColliderSize;
             movementSpeed = crouchSpeed;
         } else {
-            transform.localScale = new Vector3(1, 1, 1);
+            meshFilter.mesh = walkMesh;
+            collider.center = walkingColliderCenter;
+            collider.size = walkingColliderSize;
             movementSpeed = normalSpeed;
         }
 
