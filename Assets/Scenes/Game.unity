@@ -567,14 +567,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 915eb123bf8be874685af08f4e701160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  walkDeathObject: {fileID: 4860135844090475770, guid: b3af261030184794eb6ac027c398ff60, type: 3}
   walkMesh: {fileID: -1016011637710242029, guid: 5e87ddfd4564feb4689769f649055178, type: 3}
-  crouchMesh: {fileID: 3340957000141638778, guid: 20fc9c5e71adb0443bff79e76235884b, type: 3}
-  normalSpeed: 15
-  crouchSpeed: 15
-  laneSwitchSpeed: 20
-  jumpForce: 10
-  normalGravity: 15
-  fastFallGravity: 40
+  crouchMesh: {fileID: -2712910405818149345, guid: dfb39248011bc5c48b7bb365ac5b5a6b, type: 3}
+  normalSpeed: 20
+  crouchSpeed: 20
+  laneSwitchSpeed: 30
+  jumpForce: 12.5
+  normalGravity: 25
+  fastFallGravity: 60
 --- !u!54 &849100289
 Rigidbody:
   m_ObjectHideFlags: 0
