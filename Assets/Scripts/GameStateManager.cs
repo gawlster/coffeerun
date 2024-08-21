@@ -46,15 +46,14 @@ public class GameStateManager: MonoBehaviour {
     }
 
     private void Update() {
-        var dyingLerpVal = Mathf.Clamp((_gameOverFrameCount - Time.frameCount + 1000) / 1000, 0, 1);
         Time.timeScale = _gameState switch {
             GameStates.Menu => 0,
             GameStates.Playing => 1,
-            GameStates.Dying => Mathf.Lerp(0, 1, dyingLerpVal),
+            GameStates.Dying => Mathf.MoveTowards(Time.timeScale, 0, Time.unscaledDeltaTime),
             GameStates.GameOver => 0,
             _ => throw new ArgumentOutOfRangeException()
         };
-        if (_gameState == GameStates.Dying && dyingLerpVal <= 0) {
+        if (_gameState == GameStates.Dying && Time.timeScale <= 0) {
             SetGameState(GameStates.GameOver);
         }
     }
