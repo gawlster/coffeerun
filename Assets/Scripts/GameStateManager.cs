@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,20 +18,21 @@ public class GameStateManager: MonoBehaviour {
         _instance._gameState = SceneManager.GetActiveScene().name == _scenes.Menu ? GameStates.Menu : GameStates.Playing;
     }
 
+    private float _gameOverFrameCount;
     private GameStates _gameState;
     private Action<GameStates> _onGameStateChanged;
     public GameStates GetGameState() {
         return _gameState;
     }
     public void SetGameState(GameStates newState) {
-        Debug.Log("Changing game state from " + _gameState + " to " + newState);
         _gameState = newState;
-        Time.timeScale = newState == GameStates.Playing ? 1 : 0;
         if (_onGameStateChanged != null) {
             foreach(var callback in _onGameStateChanged.GetInvocationList()) {
                 callback?.DynamicInvoke(_gameState);
             }
         }
+        
+        _gameOverFrameCount = newState == GameStates.Dying ? Time.frameCount : 0;
 
         if (newState == GameStates.Playing) {
             SceneManager.LoadScene(_scenes.Game);
@@ -43,9 +45,24 @@ public class GameStateManager: MonoBehaviour {
         _onGameStateChanged += callback;
     }
 
+    private void Update() {
+        var dyingLerpVal = Mathf.Clamp((_gameOverFrameCount - Time.frameCount + 1000) / 1000, 0, 1);
+        Time.timeScale = _gameState switch {
+            GameStates.Menu => 0,
+            GameStates.Playing => 1,
+            GameStates.Dying => Mathf.Lerp(0, 1, dyingLerpVal),
+            GameStates.GameOver => 0,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+        if (_gameState == GameStates.Dying && dyingLerpVal <= 0) {
+            SetGameState(GameStates.GameOver);
+        }
+    }
+
     public enum GameStates {
         Menu,
         Playing,
+        Dying,
         GameOver
     }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerMovementController : MonoBehaviour {
+    [SerializeField] private GameObject walkDeathObject;
     [SerializeField] private Mesh walkMesh;
     [SerializeField] private Mesh crouchMesh;
     private MeshFilter meshFilter;
@@ -13,13 +14,13 @@ public class PlayerMovementController : MonoBehaviour {
     private Vector3 walkingColliderSize = new Vector3(0.13f, 0.18f, 0.13f);
     private Vector3 crouchingColliderCenter = Vector3.zero;
     private Vector3 crouchingColliderSize = new Vector3(0.13f, 0.05f, 0.13f);
-    [SerializeField] private float normalSpeed = 15;
-    [SerializeField] private float crouchSpeed = 15;
+    [SerializeField] private float normalSpeed = 20;
+    [SerializeField] private float crouchSpeed = 20;
     private float movementSpeed = 10;
-    [SerializeField] private float laneSwitchSpeed = 20;
-    [SerializeField] private float jumpForce = 10;
-    [SerializeField] private float normalGravity = 15;
-    [SerializeField] private float fastFallGravity = 40;
+    [SerializeField] private float laneSwitchSpeed = 30;
+    [SerializeField] private float jumpForce = 12.5f;
+    [SerializeField] private float normalGravity = 25;
+    [SerializeField] private float fastFallGravity = 60;
     
     private Rigidbody rb;
     private InputAction jumpAction;
@@ -46,37 +47,41 @@ public class PlayerMovementController : MonoBehaviour {
     }
 
     private void Update() {
-        if (jumpAction.IsPressed()) {
-            Debug.Log(isGroundedCheck());
-        }
-        if (!isJumping && isGroundedCheck() && jumpAction.IsPressed()) {
-            StartCoroutine(startJumpCooldown());
-            rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
+        if (GameStateManager.Instance.GetGameState() == GameStateManager.GameStates.Dying) {
+            Instantiate(walkDeathObject, transform.position, Quaternion.identity);
+            Destroy(gameObject);
         }
 
-        if (isGroundedCheck() && crouchAction.IsPressed()) {
-            meshFilter.mesh = crouchMesh;
-            collider.center = crouchingColliderCenter;
-            collider.size = crouchingColliderSize;
-            movementSpeed = crouchSpeed;
-        } else {
-            meshFilter.mesh = walkMesh;
-            collider.center = walkingColliderCenter;
-            collider.size = walkingColliderSize;
-            movementSpeed = normalSpeed;
-        }
+        else if (GameStateManager.Instance.GetGameState() == GameStateManager.GameStates.Playing) {
+            if (!isJumping && isGroundedCheck() && jumpAction.IsPressed()) {
+                StartCoroutine(startJumpCooldown());
+                rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
+            }
 
-        if (!isGroundedCheck() && crouchAction.IsPressed()) {
-            isFastFalling = true;
-        } else {
-            isFastFalling = false;
-        }
+            if (isGroundedCheck() && crouchAction.IsPressed()) {
+                meshFilter.mesh = crouchMesh;
+                collider.center = crouchingColliderCenter;
+                collider.size = crouchingColliderSize;
+                movementSpeed = crouchSpeed;
+            } else {
+                meshFilter.mesh = walkMesh;
+                collider.center = walkingColliderCenter;
+                collider.size = walkingColliderSize;
+                movementSpeed = normalSpeed;
+            }
+
+            if (!isGroundedCheck() && crouchAction.IsPressed()) {
+                isFastFalling = true;
+            } else {
+                isFastFalling = false;
+            }
         
-        if (movementDirection == MovementDirection.None && leftAction.WasPressedThisFrame() && currentLane != Lane.Left) {
-            movementDirection = MovementDirection.Left;
-        }
-        if (movementDirection == MovementDirection.None && rightAction.WasPressedThisFrame() && currentLane != Lane.Right) {
-            movementDirection = MovementDirection.Right;
+            if (movementDirection == MovementDirection.None && leftAction.WasPressedThisFrame() && currentLane != Lane.Left) {
+                movementDirection = MovementDirection.Left;
+            }
+            if (movementDirection == MovementDirection.None && rightAction.WasPressedThisFrame() && currentLane != Lane.Right) {
+                movementDirection = MovementDirection.Right;
+            }
         }
     }
 

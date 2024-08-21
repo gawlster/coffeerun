@@ -6,7 +6,7 @@ using UnityEngine;
 public class ObstacleController : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject.CompareTag("Player")) {
-            GameStateManager.Instance.SetGameState(GameStateManager.GameStates.GameOver);
+            GameStateManager.Instance.SetGameState(GameStateManager.GameStates.Dying);
         }
     }
 }
